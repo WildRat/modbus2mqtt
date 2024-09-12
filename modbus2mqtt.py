@@ -114,7 +114,7 @@ with open(args.registers,"r") as csvfile:
         if row["Topic"][0]=="#":
             continue
         if row["Topic"]=="DEFAULT":
-            temp=dict((k,v) for k,v in row.iteritems() if v is not None and v!="")
+            temp=dict((k,v) for k,v in row.items() if v is not None and v!="")
             defaultrow.update(temp)
             continue
         freq=row["Frequency"]
@@ -165,11 +165,14 @@ def messagehandler(mqc,userdata,msg):
     except Exception as e:
         logging.error("Error on message " + msg.topic + " :" + str(e))
     
-def connecthandler(mqc,userdata,rc):
-    logging.info("Connected to MQTT broker with rc=%d" % (rc))
-    mqc.subscribe(topic+"set/+/"+str(cst.WRITE_SINGLE_REGISTER)+"/+")
-    mqc.subscribe(topic+"set/+/"+str(cst.WRITE_SINGLE_COIL)+"/+")
-    mqc.publish(topic+"connected",2,qos=1,retain=True)
+def connecthandler(mqc,userdata,flags,rc):
+    if rc != 0:
+        logging.info("Failed to connect to MQTT broker with rc=%d" % (rc))
+    else:
+        logging.info("Connected to MQTT broker with rc=%d" % (rc))
+        mqc.subscribe(topic+"set/+/"+str(cst.WRITE_SINGLE_REGISTER)+"/+")
+        mqc.subscribe(topic+"set/+/"+str(cst.WRITE_SINGLE_COIL)+"/+")
+        mqc.publish(topic+"connected","true",qos=1,retain=True)
 
 def disconnecthandler(mqc,userdata,rc):
     logging.warning("Disconnected from MQTT broker with rc=%d" % (rc))
@@ -180,7 +183,7 @@ try:
     mqc.on_connect=connecthandler
     mqc.on_message=messagehandler
     mqc.on_disconnect=disconnecthandler
-    mqc.will_set(topic+"connected",0,qos=2,retain=True)
+    mqc.will_set(topic+"connected","false",qos=2,retain=True)
     mqc.disconnected =True
     mqc.connect(args.mqtt_host,args.mqtt_port,60)
     mqc.loop_start()
@@ -204,4 +207,3 @@ try:
 except Exception as e:
     logging.error("Unhandled error [" + str(e) + "]")
     sys.exit(1)
-    
