@@ -102,7 +102,7 @@ the retain flag set.
 
 A special topic "<prefix>/connected" is maintained. 
 It's a enum stating whether the module is currently running and connected to 
-the broker (1) and to the Modbus interface (2).
+the broker (false) and to the Modbus interface (true).
 
 Setting Modbus coils (FC=5) and registers (FC=6)
 ------------------------------------------------
