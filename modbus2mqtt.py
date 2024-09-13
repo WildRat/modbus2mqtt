@@ -26,7 +26,7 @@ import modbus_tk.defines as cst
 from modbus_tk import modbus_rtu
 from modbus_tk import modbus_tcp
 
-version="0.5"
+version="0.6"
     
 parser = argparse.ArgumentParser(description='Bridge between ModBus and MQTT')
 parser.add_argument('--mqtt-host', default='localhost', help='MQTT server address. Defaults to "localhost"')
@@ -148,7 +148,7 @@ def messagehandler(mqc,userdata,msg):
             logging.warning("on message - invalid slaveid " + msg.topic)
             return
 
-        if not (int(register) >= 0 and int(register) < sys.maxint):
+        if not (int(register) >= 0 and int(register) < sys.maxsize):
             logging.warning("on message - invalid register " + msg.topic)
             return
 
