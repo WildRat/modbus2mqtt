@@ -117,7 +117,8 @@ There is only limited sanity checking currently on the payload values.
 
 Changelog
 ---------
-* 0.6 - 2024/09/13 - Fix various compatibility errors with recent Python and libraries versions
+* 0.6 - 2024/09/13 - Wild Rat
+  - Fix various compatibility errors with recent Python and libraries versions
 * 0.4 - 2015/07/31 - nzfarmer
   - added support for MQTT subscribe + Mobdus write
     Topics are of the form: prefix/set/<slaveid (0:255)>/<fc (5,6)>/<register>  (payload = value to write)
